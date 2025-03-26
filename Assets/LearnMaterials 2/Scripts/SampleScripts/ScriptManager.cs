@@ -10,6 +10,7 @@ public class SampleScriptManager : MonoBehaviour
         scripts.AddRange(FindObjectsOfType<SampleScript>());
     }
 
+    [ContextMenu("RUN")]
     public void UseAll()
     {
         foreach (var script in scripts)
