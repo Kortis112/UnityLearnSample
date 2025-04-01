@@ -7,7 +7,10 @@ using UnityEngine;
 [HelpURL("https://docs.google.com/document/d/1GP4_m0MzOF8L5t5pZxLChu3V_TFIq1czi1oJQ2X5kpU/edit?usp=sharing")]
 public class GameObjectActivator : MonoBehaviour
 {
-    private List<StateContainer> targets;
+    [SerializeField, Tooltip("Объекты для переключения")] 
+    private List<StateContainer> targets = new List<StateContainer>();
+
+    [SerializeField, Tooltip("Отрисовка связей в сцене")] 
     private bool debug;
 
     private void Awake()
@@ -17,10 +20,10 @@ public class GameObjectActivator : MonoBehaviour
             item.defaultValue = item.targetGO.activeSelf;
         }
     }
-    public void ActivateModule()
-    {
-        SetStateForAll();
-    }
+    [ContextMenu("Переключить объекты")]
+    public void ActivateModule() => SetStateForAll();
+
+    [ContextMenu("Вернуть в исходное состояние")]
     public void ReturnToDefaultState()
     {
         foreach (var item in targets)
