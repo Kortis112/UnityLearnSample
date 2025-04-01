@@ -1,16 +1,46 @@
 using UnityEngine;
+using UnityEngine.Events;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+[RequireComponent(typeof(Renderer))]
+public class ObstacleItem : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [Range(0f, 1f)]
+    public float currentValue = 1f;
+    public UnityEvent onDestroyObstacle;
+
+    private Renderer rend;
+    private Color healthyColor = Color.white;
+    private Color damagedColor = Color.red;
+
+    private void Start()
     {
-        
+        rend = GetComponent<Renderer>();
+        UpdateColor();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        UpdateColor();
     }
+
+    private void UpdateColor()
+    {
+        rend.material.color = Color.Lerp(damagedColor, healthyColor, currentValue);
+    }
+
+    public void GetDamage(float value)
+    {
+        currentValue -= value;
+        currentValue = Mathf.Clamp01(currentValue);
+
+        Debug.Log("Current Value: " + currentValue);
+
+        if (currentValue <= 0)
+        {
+            Debug.Log("Obstacle is destroyed! Triggering event...");
+            onDestroyObstacle?.Invoke();
+            Destroy(gameObject); 
+        }
+    }
+
 }
